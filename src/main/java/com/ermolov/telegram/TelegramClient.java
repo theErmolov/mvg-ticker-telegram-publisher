@@ -35,12 +35,11 @@ public class TelegramClient {
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(OBJECT_MAPPER.writeValueAsString(telegramRequest)))
                     .build();
-            String body = httpClient
+            var body = httpClient
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString())
                     .body();
 
             return OBJECT_MAPPER.readValue(body, SendMessageResponse.class);
-
         } catch (Exception e) {
             throw new RuntimeException("Couldn't send message to Telegram", e);
         }

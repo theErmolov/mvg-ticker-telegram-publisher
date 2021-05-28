@@ -32,7 +32,7 @@ public class RssParser {
             var description = "";
             var guid = "";
 
-            XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(new StringReader(xml));
+            var xmlEventReader = xmlInputFactory.createXMLEventReader(new StringReader(xml));
             while (xmlEventReader.hasNext()) {
                 var xmlEvent = xmlEventReader.nextEvent();
                 if (xmlEvent.isStartElement()) {
@@ -53,7 +53,6 @@ public class RssParser {
                     }
                 } else if (xmlEvent.isEndElement() && ITEM.equals(xmlEvent.asEndElement().getName().getLocalPart())) {
                     resultFeed.add(new TickerItem(title, link, description, guid));
-//                    xmlEventReader.nextEvent();
                 }
             }
         } catch (XMLStreamException e) {
