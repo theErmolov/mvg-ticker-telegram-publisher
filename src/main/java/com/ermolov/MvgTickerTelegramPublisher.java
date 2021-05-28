@@ -7,6 +7,7 @@ import com.ermolov.persistence.NoopRepository;
 import com.ermolov.persistence.TickerItemRepository;
 import com.ermolov.rss.MvgTickerClient;
 import com.ermolov.rss.RssParser;
+import com.ermolov.rss.TickerItem;
 import com.ermolov.telegram.SendMessageResponse;
 import com.ermolov.telegram.TelegramClient;
 
@@ -49,26 +50,28 @@ public class MvgTickerTelegramPublisher implements RequestHandler<Map<String, St
         }
 
         private void run() {
-            rssParser.parseRss(mvgTickerClient.sendRequestToMvgTicker())
-                    .stream()
+            rssParser.parseRss(mvgTickerClient.sendRequestToMvgTicker()).stream()
                     .filter(tickerItemRepository::isNotProcessed)
                     .forEach(this::processItem);
         }
 
-        private void processItem(com.ermolov.rss.TickerItem tickerItem) {
+        private void processItem(TickerItem tickerItem) {
             SendMessageResponse result = telegramClient.publish(tickerItem);
-            if (result != null) {
-                var success = "true".equals(result.getOk());
-                if (success) {
-                    System.out.printf("Message with guid %s has been processed successfully%n", tickerItem.getGuid());
-                } else {
-                    System.out.printf("Message with guid %s has been rejected by Telegram with error message '%s'%n",
-                            tickerItem.getGuid(),
-                            result.getDescription());
-                }
-
-                tickerItemRepository.persist(tickerItem, success, result.getDescription());
+            if (result == null) {
+                throw new RuntimeException("Couldn't parse Telegram response or something like that");
             }
+
+            var success = "true".equals(result.getOk());
+            if (success) {
+                System.out.printf("Message with guid %s has been processed successfully%n", tickerItem.getGuid());
+            } else {
+                System.out.printf("Message with guid %s has been rejected by Telegram with error message '%s'%n",
+                        tickerItem.getGuid(),
+                        result.getDescription());
+            }
+
+            tickerItemRepository.persist(tickerItem, success, result.getDescription());
+
         }
     }
 }
