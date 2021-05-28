@@ -14,9 +14,6 @@ import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.Map;
 
-/**
- * Hello world!
- */
 public class MvgTickerTelegramPublisher implements RequestHandler<Map<String, String>, String> {
     private static final String TABLE_NAME_KEY = "tableName";
     private static final String API_TOKEN_KEY = "telegramApiToken";
