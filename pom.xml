@@ -6,7 +6,7 @@
 
     <groupId>com.ermolov</groupId>
     <artifactId>mvg-ticker-telegram-publisher</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
 
     <name>mvg-ticker-telegram-publisher</name>
     <url>https://mvg.de</url>
