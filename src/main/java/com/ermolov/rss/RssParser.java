@@ -72,6 +72,7 @@ public class RssParser {
         return StringEscapeUtils.unescapeHtml4(textRaw
                 .replaceAll("</div> ", "\n")
                 .replaceAll("<br/>", "\n\n")
+                .replaceAll("<br>", "\n\n")
                 .replaceAll("</a>", "SLASH-A")
                 .replaceAll("<[^a][^>]*>", "")
                 .replaceAll("SLASH-A", "</a>")
